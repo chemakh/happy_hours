@@ -1,0 +1,113 @@
+security:
+  oauth2:
+    client:
+      clientId: agenda-communication
+      clientSecret: agenda-communication-secret
+      accessTokenUri: http://localhost:8888/uaa/oauth/token
+      grant-type: client_credentials
+      scope: server
+    resource:
+          userInfoUri: http://localhost:8888/uaa/user/current
+
+server:
+  port : 6060
+spring:
+    data:
+        elasticsearch:
+            cluster-name: technetmedia
+            cluster-nodes: localhost:9300
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false
+    mail:
+        host:      smtpng.dfinet.ch
+        port :     465
+        username:  webmaster@agendasante.ch
+        password:  wD9DtbmL[zsR
+        from :     webmaster@agendasante.ch
+        protocol : smtp
+        properties:
+#        If true, attempt to authenticate the user using the AUTH command. Defaults to false.
+          mail.smtp.auth:  true
+#          If set to true, use SSL to connect and use the SSL port by default. Defaults to false for the "smtp" protocol and true for the "smtps" protocol.
+          mail.smtp.ssl.enable : true
+
+    messages:
+        basename: i18n/messages
+        cache-seconds: 1
+    thymeleaf:
+        cache: false
+        mode: XHTML
+    jmx:
+        default-domain: ${spring.application.name}
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maxQueueSize: -1
+      queueSizeRejectionThreshold: 5
+  command:
+    default:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 60000
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+
+# ===================================================================
+# Agenda specific properties
+# ===================================================================
+
+agenda:
+    cache: #
+        timeToLiveSeconds: 3600
+        ehcache:
+            maxBytesLocalHeap: 16M
+
+    activationUrl : http://localhost:3000
+
+    mail:
+      from: webmaster@agendasante.ch
+      admin : mmrfbb@gmail.com
+
+    swagger:
+        title: agendaService API
+        description: agendaService API documentation
+        version: 0.0.1
+        termsOfServiceUrl:
+        contactName:
+        contactUrl:
+        contactEmail:
+        license: Apache 2.0
+        licenseUrl: http://www.apache.org/licenses/LICENSE-2.0
+    async:
+         corePoolSize: 2
+         maxPoolSize: 50
+         queueCapacity: 10000
+    sms:
+        twilio:
+          from : +41798073707
+          account_sid:  AC0026eda931acdd1595808dbf1ba2b107
+          auth_token : 152ea712cc6a7220fb19ef12cfa772d3
+
+    rabbit:
+        exchange: agenda-lot-sms-exchange
+        exchangeError: agenda-lot-sms-exchange-error
+        queue: agenda.lot.sms
+        queueError: agenda.lot.sms.error
+        host: localhost
+        vhost: /
+        username: guest
+        password: guest
+        port: 5672

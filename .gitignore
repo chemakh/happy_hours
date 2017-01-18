@@ -2,8 +2,7 @@
 /.idea
 /.mvn
 /target
-/.sonar
-sonar-project.properties
+
 /happyhoursService/target
 /happyhoursService/.mvn
 /happyhoursService/mvnw
@@ -35,5 +34,3 @@ sonar-project.properties
 /happyhoursStatistic/target
 /happyhoursStatistic/mvnw
 /happyhoursStatistic/mvnw.cmd
-
-/data

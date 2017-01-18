@@ -1,0 +1,64 @@
+server:
+    port: 8888
+    contextPath: /uaa
+
+logging:
+    level:
+        org:
+            springframework:
+                security: INFO
+
+spring:
+    application:
+        name: authServer_dev
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false
+    datasource:
+        url: jdbc:mysql://localhost:3306/happyHours?useUnicode=true&characterEncoding=utf8&useSSL=false
+        name:
+        username: root
+        password: root
+        hikari:
+            data-source-properties:
+              cachePrepStmts: true
+              prepStmtCacheSize: 250
+              prepStmtCacheSqlLimit: 2048
+              useServerPrepStmts: true
+    jpa:
+        database: MYSQL
+        show_sql: true
+        hibernate:
+          ddl-auto : update
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+            hibernate.dialect : org.hibernate.dialect.MySQL5Dialect
+    jmx:
+        default-domain: ${spring.application.name}
+
+# ===================================================================
+# happy-hours specific properties
+# ===================================================================
+
+happy-hours:
+    security:
+       authentication:
+          oauth:
+            clientid: acme
+            secret: acmesecret
+            scope:  openid
+              # Token is valid 60 minutes
+            tokenValidityInSeconds: 3600
+            jwtKeystoreSecret : happyHourskey
+       oauth2:
+           communication:
+               clientid: happy-hours-communication
+               secret: happy-hours-communication-secret
+           service:
+               clientid: happy-hours-service
+               secret: happy-hours-service-secret
