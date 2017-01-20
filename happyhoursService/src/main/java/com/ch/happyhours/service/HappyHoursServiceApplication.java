@@ -10,7 +10,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 
 @ComponentScan("com.ch.happyhours.service")
 @EnableFeignClients
-@EnableWebSocketMessageBroker
+//@EnableWebSocketMessageBroker
 @EnableHystrix
 //@EnableHystrixDashboard
 @EnableJpaRepositories("com.ch.happyhours.service.repository")
