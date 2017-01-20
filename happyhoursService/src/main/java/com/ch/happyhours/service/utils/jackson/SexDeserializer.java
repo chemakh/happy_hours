@@ -1,0 +1,17 @@
+package com.ch.happyhours.service.utils.jackson;
+
+import com.ch.happyhours.service.domain.Sex;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+
+import java.io.IOException;
+
+public class SexDeserializer extends JsonDeserializer<Sex>
+{
+    @Override
+    public Sex deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException
+    {
+        return Sex.fromString(jsonParser.getText().toUpperCase());
+    }
+}

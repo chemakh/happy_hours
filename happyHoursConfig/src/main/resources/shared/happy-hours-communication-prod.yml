@@ -1,8 +1,8 @@
 security:
   oauth2:
     client:
-      clientId: agenda-communication
-      clientSecret: agenda-communication-secret
+      clientId: happy-hours-communication
+      clientSecret: happy-hours-communication-secret
       accessTokenUri: http://localhost:7777/uaa/oauth/token
       grant-type: client_credentials
       scope: server
@@ -11,11 +11,7 @@ security:
 
 server:
   port : 6060
-spring:
-    data:
-        elasticsearch:
-            cluster-name: technetmedia
-            cluster-nodes: localhost:9300
+spring:   
     devtools:
         restart:
             enabled: true
@@ -36,10 +32,7 @@ spring:
 
     messages:
         basename: i18n/messages
-        cache-seconds: 1
-    thymeleaf:
-        cache: false
-        mode: XHTML
+        cache-seconds: 1    
     jmx:
         default-domain: ${spring.application.name}
 
@@ -66,10 +59,10 @@ hystrix:
 
 
 # ===================================================================
-# Agenda specific properties
+# HappyHours specific properties
 # ===================================================================
 
-agenda:
+happy-hours:
     cache: #
         timeToLiveSeconds: 3600
         ehcache:
@@ -82,8 +75,8 @@ agenda:
       admin : mmrfbb@gmail.com
 
     swagger:
-        title: agendaService API
-        description: agendaService API documentation
+        title: happy-hours Communication API
+        description: happy-hours API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contactName:
@@ -94,20 +87,4 @@ agenda:
     async:
          corePoolSize: 2
          maxPoolSize: 50
-         queueCapacity: 10000
-    sms:
-        twilio:
-          from : +41798073707
-          account_sid:  AC0026eda931acdd1595808dbf1ba2b107
-          auth_token : 152ea712cc6a7220fb19ef12cfa772d3
-
-    rabbit:
-        exchange: agenda-lot-sms-exchange
-        exchangeError: agenda-lot-sms-exchange-error
-        queue: agenda.lot.sms
-        queueError: agenda.lot.sms.error
-        host: localhost
-        vhost: /
-        username: guest
-        password: guest
-        port: 5672
+         queueCapacity: 10000 

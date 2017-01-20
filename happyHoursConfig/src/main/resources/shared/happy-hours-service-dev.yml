@@ -1,13 +1,13 @@
 spring:
     application:
-        name: agendaService_dev
+        name: happy-hoursService_dev
     devtools:
         restart:
             enabled: true
         livereload:
             enabled: false
     datasource:
-        url: jdbc:mysql://192.168.1.2:3306/ag?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/happyhours?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
         username: root
         password: root
@@ -27,19 +27,9 @@ spring:
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
-            hibernate.dialect : org.hibernate.dialect.MySQL5Dialect
-    data:
-        elasticsearch:
-             cluster-name: technetmedia
-             cluster-nodes: localhost:9300
+            hibernate.dialect : org.hibernate.dialect.MySQL5Dialect   
     jmx:
-        default-domain: ${spring.application.name}
-    batch:
-      job:
-        names:   smsBefore24hNotification
-        enabled: false
-      initializer:
-        enabled: false
+        default-domain: ${spring.application.name}   
     messages:
       basename: i18n/messages
       cache-seconds: 1
@@ -48,17 +38,17 @@ spring:
 security:
   oauth2:
     resource:
-      userInfoUri: http://localhost:8888/uaa/user/current
+      userInfoUri: http://localhost:7777/uaa/user/current
     client:
-      clientId: delta-agenda-service
-      clientSecret: delta-agenda-service-secret
-      accessTokenUri: http://localhost:8888/uaa/oauth/token
-      userAuthorizationUri: http://localhost:8888/uaa/oauth/authorize
+      clientId: happy-hours-service
+      clientSecret: happy-hours-service-secret
+      accessTokenUri: http://localhost:7777/uaa/oauth/token
+      userAuthorizationUri: http://localhost:7777/uaa/oauth/authorize
       grant-type: client_credentials
       scope: server
 
 server:
-    port: 8282
+    port: 8181
 
 hystrix:
     threadpool.default:
@@ -78,28 +68,17 @@ flyway :
   enabled : false
 
 # ===================================================================
-# agenda specific properties
+# happy-hours specific properties
 # ===================================================================
 
-agenda:
+happy-hours:
     cache:
         timeToLiveSeconds: 3600
         ehcache:
             maxBytesLocalHeap: 16M
-
-    rabbit:
-        exchange: agenda-lot-sms-exchange
-        queue: agenda.lot.sms
-        host: localhost
-        vhost: /
-        username: guest
-        password: guest
-        port: 5672
-        relayport: 61613
-
     swagger:
-        title: agenda service  API
-        description: agenda API documentation
+        title: happy-hours service  API
+        description: happy-hours API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contactName:
@@ -107,38 +86,14 @@ agenda:
         contactEmail:
         license: Apache 2.0
         licenseUrl: http://www.apache.org/licenses/LICENSE-2.0
-
-    admin:
-      email: mahjoub.marzougui@technetmedia.ch
-
     feign:
       communication: http://localhost:6060/ws
-      auth : http://localhost:8888/uaa/
+      auth : http://localhost:7777/uaa/
       medicalpartner: http://localhost:7080/ws
-
-    sms :
-      cron : 0 * 1 * * ? #TODO @Henrique configure this cron .
     photo:
-      path: /Users/technetmedia_khaled/projets/agendastorage
-      url: http://192.168.1.2/agendastorage
+      path: /home/ubuntu/workspace/storage
+      url: http://83.166.136.134/storage
 
-    merged:
-      params:
-        code: code
-        note: note
-        openingHour: 00:00
-        closureHour : 23:45
-        tel : 022 852 74 15
-        fax : 022 852 74 15
-        state: true
-        label : Médecine générale - Rendez-vous rapide
-        bgColor : red
-        maxRdv: 2
-        reservationType: FAST
-        street : CPO
-        canton:  1
-        commune : 265
-        npa: 68
     security:
        authentication:
           oauth:
@@ -148,6 +103,7 @@ agenda:
             grant_type : password
             grant_type_refresh : refresh_token
     test:
-      token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODEyMTYwOTksInVzZXJfbmFtZSI6Im5hZGVyLmtoZWRocmlAdGVjaG5ldG1lZGlhLmNoIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9QQVRJRU5UIl0sImp0aSI6IjhhY2Y3YmNjLWU2YzktNDE3MC05NTg5LTg4NWQxZDQwZjNkYiIsImNsaWVudF9pZCI6ImFjbWUiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.UP44f1scRUPSAfv03hxcStkE8gBkPVP62K3qDepkQiDYvKFy8bo_hVfYpvbpMYD1X78eRDy9PAIFAa4f2_ZF4atNmq0vM_cIaqRZj8GkiDiURjKNw_h5q8iMf8N-sS2NsJJ0FVByVwfy3k_PK3ihx3GgcyNHJiKoyUCeWi6f8BopXqxbtg5wUAsg9yOLmBEJ8O_QzXaXRG1HMlQ9ujf3jse_hl0iyxjc7zW_7eMoz8sYNDf_PdfHaPkNcK4BEbdAuwtHhxe74xxHhmJaE6OrEUAzos1M6MzhdgobHI83yn0oh8uWVXvCUioOek-pGIS3pzizOTE52oSn3BYYrPvn3w
+      token: 
       enabled: false
-
+      swagger:
+              token:

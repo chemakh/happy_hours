@@ -1,16 +1,16 @@
 spring:
     application:
-        name: agendaService_prod
+        name: happy-hoursService_prod
     devtools:
         restart:
             enabled: true
         livereload:
             enabled: false
     datasource:
-        url: jdbc:mysql://localhost:3306/agenda?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/happyhours?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
-        username: agendauser
-        password: QYTJDc85
+        username: root
+        password: root
         hikari:
             data-source-properties:
               cachePrepStmts: true
@@ -28,18 +28,8 @@ spring:
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
             hibernate.dialect : org.hibernate.dialect.MySQL5Dialect
-    data:
-        elasticsearch:
-             cluster-name: technetmedia
-             cluster-nodes: localhost:9300
     jmx:
         default-domain: ${spring.application.name}
-    batch:
-      job:
-        names:   smsBefore24hNotification
-        enabled: false
-      initializer:
-        enabled: false
     messages:
       basename: i18n/messages
       cache-seconds: 1
@@ -50,8 +40,8 @@ security:
     resource:
       userInfoUri: http://localhost:7777/uaa/user/current
     client:
-      clientId: delta-agenda-service
-      clientSecret: delta-agenda-service-secret
+      clientId: happy-hours-service
+      clientSecret: happy-hours-service-secret
       accessTokenUri: http://localhost:7777/uaa/oauth/token
       userAuthorizationUri: http://localhost:7777/uaa/oauth/authorize
       grant-type: client_credentials
@@ -78,28 +68,17 @@ flyway :
   enabled : false
 
 # ===================================================================
-# agenda specific properties
+# happy-hours specific properties
 # ===================================================================
 
-agenda:
+happy-hours:
     cache:
         timeToLiveSeconds: 3600
         ehcache:
             maxBytesLocalHeap: 16M
-
-    rabbit:
-        exchange: agenda-lot-sms-exchange
-        queue: agenda.lot.sms
-        host: localhost
-        vhost: /
-        username: guest
-        password: guest
-        port: 5672
-        relayport: 61613
-
     swagger:
-        title: agenda service  API
-        description: agenda API documentation
+        title: Happy-hours service  API
+        description: Happy-hours API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contactName:
@@ -107,38 +86,14 @@ agenda:
         contactEmail:
         license: Apache 2.0
         licenseUrl: http://www.apache.org/licenses/LICENSE-2.0
-
-    admin:
-      email: mahjoub.marzougui@technetmedia.ch
-
     feign:
       communication: http://localhost:6060/ws
       auth : http://localhost:7777/uaa/
       medicalpartner: http://localhost:7080/ws
-
-    sms :
-      cron : 0 * 1 * * ? #TODO @Henrique configure this cron .
     photo:
-      path: /home/ubuntu/workspace/agendastorage
-      url: http://83.166.136.134/agendastorage
+      path: /home/ubuntu/workspace/storage
+      url: http://83.166.136.134/storage
 
-    merged:
-      params:
-        code: code
-        note: note
-        openingHour: 00:00
-        closureHour : 23:45
-        tel : 022 852 74 15
-        fax : 022 852 74 15
-        state: true
-        label : Médecine générale - Rendez-vous rapide
-        bgColor : red
-        maxRdv: 2
-        reservationType: FAST
-        street : CPO
-        canton:  1
-        commune : 265
-        npa: 68
     security:
        authentication:
           oauth:
@@ -148,5 +103,7 @@ agenda:
             grant_type : password
             grant_type_refresh : refresh_token
     test:
-      token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODEyMTYwOTksInVzZXJfbmFtZSI6Im5hZGVyLmtoZWRocmlAdGVjaG5ldG1lZGlhLmNoIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9QQVRJRU5UIl0sImp0aSI6IjhhY2Y3YmNjLWU2YzktNDE3MC05NTg5LTg4NWQxZDQwZjNkYiIsImNsaWVudF9pZCI6ImFjbWUiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.UP44f1scRUPSAfv03hxcStkE8gBkPVP62K3qDepkQiDYvKFy8bo_hVfYpvbpMYD1X78eRDy9PAIFAa4f2_ZF4atNmq0vM_cIaqRZj8GkiDiURjKNw_h5q8iMf8N-sS2NsJJ0FVByVwfy3k_PK3ihx3GgcyNHJiKoyUCeWi6f8BopXqxbtg5wUAsg9yOLmBEJ8O_QzXaXRG1HMlQ9ujf3jse_hl0iyxjc7zW_7eMoz8sYNDf_PdfHaPkNcK4BEbdAuwtHhxe74xxHhmJaE6OrEUAzos1M6MzhdgobHI83yn0oh8uWVXvCUioOek-pGIS3pzizOTE52oSn3BYYrPvn3w
+      token:
       enabled: false
+      swagger:
+              token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0ODQ4MTUzNzcsInVzZXJfbmFtZSI6ImFkbWluQGFnZW5kYS5jaCIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwianRpIjoiODNlOTkzNTMtZjk0ZC00OTA3LThhZWEtZTE3ZGY0YWVlODdkIiwiY2xpZW50X2lkIjoiYWNtZSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.B02ILySrPP8ftSCscgl-RrH5KTi7XynuOvIRZBUIUHuPI_uWvAJhTNVYFtfYUO2Am2dYqOpAjTNm53NGajLhWFlvfFsNyspC57WML0v2802lQwOKzoN-ayPbYGtRQgp3I1_FzAf5xUw2CwxewU5UeZrL5olro4zZvVTLgRG16ral2XaXt2g2P2I99ukMHVs7_g0s3Jw_rOBg21uub-ovIe9xQlB0kjAQI-K4xBGT46QhLwj5QP4Bgp2S8rzyAY6YiZQ7jIB622bX36vZH4cka7G8EWMS4dQOa2gSDc7e18Xnw29xxPxBCqwSYweE9Rd56vX9z572P2tNS1Dfqltu9A
