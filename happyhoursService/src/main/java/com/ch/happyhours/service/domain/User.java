@@ -42,14 +42,12 @@ public class User implements Serializable
     @Column(name = "email", nullable = true)
     private String email;
 
-    @Column(name = "password", length = 60, nullable = true)
+    @Column(name = "password", length = 10, nullable = true)
     private String password;
 
     @Column(name = "activated", nullable = false)
     private boolean activated = false;
 
-    @Column(name = "lang_key", length = 5)
-    private String langKey;
 
     @Column(name = "email_key", length = 20)
     private String emailKey;
@@ -136,15 +134,6 @@ public class User implements Serializable
         this.id = id;
     }
 
-    public String getLangKey()
-    {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey)
-    {
-        this.langKey = langKey;
-    }
 
     public String getReference()
     {
