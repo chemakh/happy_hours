@@ -26,8 +26,8 @@ public class JSR310LocalDateTimeDeserializer extends JsonDeserializer<LocalDateT
     }
 
     @Override
-    public LocalDateTime deserialize(JsonParser value, DeserializationContext deserializationContext) throws IOException, JsonProcessingException
+    public LocalDateTime deserialize(JsonParser value, DeserializationContext deserializationContext) throws IOException
     {
-        return LocalDateTime.parse(value.getText(), ISOFormatter).atZone(Constants.zoneId).toLocalDateTime();
+        return LocalDateTime.parse(value.getText(), ISOFormatter).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }

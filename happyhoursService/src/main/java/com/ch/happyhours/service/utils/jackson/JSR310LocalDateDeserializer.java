@@ -66,7 +66,6 @@ public class JSR310LocalDateDeserializer extends JsonDeserializer<LocalDate>
                     return null;
                 }
                 return LocalDate.parse(string, ISO_DATE_OPTIONAL_TIME);
-            //TODO verify date Caused by: java.time.format.DateTimeParseException: Text '1998-05-80' could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 80
         }
         throw context.wrongTokenException(parser, JsonToken.START_ARRAY, "Expected array or string.");
     }

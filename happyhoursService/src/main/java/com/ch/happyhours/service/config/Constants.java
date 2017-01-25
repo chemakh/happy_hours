@@ -1,7 +1,7 @@
 package com.ch.happyhours.service.config;
 
 
-import java.time.ZoneId;
+
 import java.time.format.DateTimeFormatter;
 
 public final class Constants
@@ -16,8 +16,6 @@ public final class Constants
     public static final String PHOTO_UNKNOWN_DOCTOR_MAN = "unknown_doctor_man.png";
 
     public static final String PHOTO_UNKNOWN_DOCTOR_WOMAN = "unknown_doctor_woman.png";
-
-    public static final ZoneId zoneId = ZoneId.of("Europe/Zurich");
 
     public static final DateTimeFormatter LocalDateTimeFormatterWithOutZone =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

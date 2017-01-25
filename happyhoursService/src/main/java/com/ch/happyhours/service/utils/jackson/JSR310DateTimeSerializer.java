@@ -13,7 +13,7 @@ public final class JSR310DateTimeSerializer extends JsonSerializer<TemporalAcces
 {
 
     private static final DateTimeFormatter ISOFormatter =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.systemDefault()/*ZoneId.of("Europe/Zurich")*/);
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.systemDefault());
 
     public static final JSR310DateTimeSerializer INSTANCE = new JSR310DateTimeSerializer();
 
