@@ -70,7 +70,7 @@ public class Establishment {
 
     private boolean haveReservation;
 
-
+    private boolean havePraking;
 
 
     @Column(name = "category")
@@ -223,5 +223,13 @@ public class Establishment {
 
     public void setHaveReservation(boolean haveReservation) {
         this.haveReservation = haveReservation;
+    }
+
+    public boolean isHavePraking() {
+        return havePraking;
+    }
+
+    public void setHavePraking(boolean havePraking) {
+        this.havePraking = havePraking;
     }
 }
