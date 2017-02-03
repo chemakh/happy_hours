@@ -1,14 +1,15 @@
 package com.ch.happyhours.auth.domain;
 
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,8 +17,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "user")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TYPE")
+@Table(name = "user", indexes = {@Index(name = "index_user_reference", columnList = "reference", unique = true)})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@DiscriminatorValue("user")
+@DiscriminatorOptions(force = false)
 public class User implements UserDetails
 {
     private static final long serialVersionUID = 1L;
@@ -49,9 +54,6 @@ public class User implements UserDetails
     @Column(name = "activated", nullable = false)
     private boolean activated = false;
 
-    @Column(name = "lang_key", length = 5)
-    private String langKey;
-
     @Column(name = "deletion_date")
     private LocalDateTime deletionDate = null;
 
@@ -63,6 +65,10 @@ public class User implements UserDetails
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Authority> authorityList = new HashSet<>();
+
+    @Column(name = "sex")
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
 
 
     public boolean isActivated()
@@ -105,15 +111,6 @@ public class User implements UserDetails
         this.id = id;
     }
 
-    public String getLangKey()
-    {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey)
-    {
-        this.langKey = langKey;
-    }
 
     public Set<Authority> getAuthorityList()
     {
@@ -199,6 +196,16 @@ public class User implements UserDetails
     public void setDeletionDate(LocalDateTime deletionDate)
     {
         this.deletionDate = deletionDate;
+    }
+
+    public Sex getSex()
+    {
+        return sex;
+    }
+
+    public void setSex(Sex sex)
+    {
+        this.sex = sex;
     }
 
 }

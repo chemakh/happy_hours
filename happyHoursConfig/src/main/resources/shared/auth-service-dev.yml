@@ -43,6 +43,7 @@ spring:
     social.facebook:
         appId: 583506341716971
         appSecret: 66ccf9b071b135155f1412a87d2f681b
+    thymeleaf.cache: false
 
 
 # ===================================================================
@@ -51,9 +52,6 @@ spring:
 
 happy-hours:
     security:
-       social.facebook:
-          appId: 583506341716971
-          appSecret: 66ccf9b071b135155f1412a87d2f681b
        authentication:
           oauth:
             clientid: acme

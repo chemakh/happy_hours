@@ -1,0 +1,14 @@
+	SET NAMES 'utf8' COLLATE 'utf8_general_ci' ;
+
+set FOREIGN_KEY_CHECKS=0 ;
+
+	DELETE FROM `authority`;
+  INSERT INTO `authority` (`id`,`name`) VALUES
+	(1,'ROLE_ADMIN'),
+	(2,'ROLE_PATIENT'),
+	(4,'ROLE_ADMIN_ASSISTANT'),
+	(5,'ROLE_DOCTOR'),
+	(6,'ROLE_DOCTOR_ASSISTANT'),
+	(7,'ROLE_CENTER');
+
+	set FOREIGN_KEY_CHECKS=1 ;

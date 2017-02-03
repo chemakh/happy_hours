@@ -1,4 +1,4 @@
-package com.ch.happyhours.service.domain;
+package com.ch.happyhours.auth.domain;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -17,8 +17,8 @@ public class Client extends User {
     @Column(name = "photoUrl", nullable = true)
     private String photoUrl;
 
-    public Client(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public Client() {
+
     }
 
     public String getPhotoUrl() {

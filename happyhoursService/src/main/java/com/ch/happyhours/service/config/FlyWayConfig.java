@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.Arrays;
 
-//@Configuration
+@Configuration
 public class FlyWayConfig
 {
     @Inject

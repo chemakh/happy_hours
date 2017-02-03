@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -27,11 +28,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @Value("${happy-hours.security.social.facebook.appId}")
+    @Value("${spring.social.facebook.appId}")
     private String appId;
 
 
-    @Value("${happy-hours.security.social.facebook.appSecret}")
+    @Value("${spring.social.facebook.appSecret}")
     private String appSecret;
 
 
@@ -59,17 +60,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        // @formatter:off
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/login*", "/signin/**", "/signup/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("/login").permitAll()
+                .and()
+                .logout();
+    } // @formatter:on
+
     @Bean
     public ConnectionFactoryLocator connectionFactoryLocator() {
         ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
-        registry.addConnectionFactory(new FacebookConnectionFactory(appId, appSecret));
+        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(appId, appSecret);
+        facebookConnectionFactory.setScope("public_profile,email");
+        registry.addConnectionFactory(facebookConnectionFactory);
         return registry;
     }
 
     @Bean
     public ProviderSignInController providerSignInController() {
 
-        usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator(), Encryptors.noOpText());
+        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(appId, appSecret);
+        facebookConnectionFactory.setScope("public_profile,email");
+        registry.addConnectionFactory(facebookConnectionFactory);
+
+        usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, registry, Encryptors.noOpText());
         ((JdbcUsersConnectionRepository) usersConnectionRepository).setConnectionSignUp(facebookConnectionSignup);
         return new ProviderSignInController(
                 connectionFactoryLocator,
