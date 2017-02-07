@@ -75,23 +75,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     } // @formatter:on
 
     @Bean
-    public ConnectionFactoryLocator connectionFactoryLocator() {
-        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+    public FacebookConnectionFactory facebookConnectionFactory()
+    {
         FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(appId, appSecret);
         facebookConnectionFactory.setScope("public_profile,email");
-        registry.addConnectionFactory(facebookConnectionFactory);
+        return facebookConnectionFactory;
+    }
+
+    @Bean
+    public ConnectionFactoryLocator connectionFactoryLocator() {
+
+        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+        registry.addConnectionFactory(facebookConnectionFactory());
         return registry;
     }
 
     @Bean
     public ProviderSignInController providerSignInController() {
 
-        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
-        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(appId, appSecret);
-        facebookConnectionFactory.setScope("public_profile,email");
-        registry.addConnectionFactory(facebookConnectionFactory);
-
-        usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, registry, Encryptors.noOpText());
+        usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator(), Encryptors.noOpText());
         ((JdbcUsersConnectionRepository) usersConnectionRepository).setConnectionSignUp(facebookConnectionSignup);
         return new ProviderSignInController(
                 connectionFactoryLocator,

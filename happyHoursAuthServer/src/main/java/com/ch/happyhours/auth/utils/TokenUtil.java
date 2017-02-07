@@ -8,7 +8,7 @@ public final class TokenUtil
 
     private static final int DEF_COUNT_KEY = 20;
 
-    private static final int DEF_COUNT_BILl = 30;
+    private static final int DEF_COUNT_PASSWORD = 8;
 
     private static final int DEF_COUNT_MIN = 4;
 
@@ -16,6 +16,10 @@ public final class TokenUtil
     {
     }
 
+    public static String generatePassword()
+    {
+        return RandomStringUtils.randomAlphanumeric(DEF_COUNT_PASSWORD);
+    }
 
     public static String generateReference()
     {

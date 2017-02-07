@@ -17,6 +17,9 @@ public class Client extends User {
     @Column(name = "photoUrl", nullable = true)
     private String photoUrl;
 
+    @Column(name = "temp_password", length = 20)
+    private String tempPassword;
+
     public Client(String photoUrl) {
         this.photoUrl = photoUrl;
     }
@@ -27,5 +30,13 @@ public class Client extends User {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getTempPassword() {
+        return tempPassword;
+    }
+
+    public void setTempPassword(String tempPassword) {
+        this.tempPassword = tempPassword;
     }
 }

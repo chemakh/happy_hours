@@ -41,8 +41,8 @@ spring:
     jmx:
         default-domain: ${spring.application.name}
     social.facebook:
-        appId: 583506341716971
-        appSecret: 66ccf9b071b135155f1412a87d2f681b
+        appId: 387218161631776
+        appSecret: 87fc3da80ce90f882e406508d539b5df
     thymeleaf.cache: false
 
 

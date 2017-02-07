@@ -16,6 +16,7 @@ import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.support.AbstractConnection;
 import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -38,16 +39,20 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
     public String execute(Connection<?> connection) {
 
         Facebook facebook = ((Connection<Facebook>) connection).getApi();
-        org.springframework.social.facebook.api.User user = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class);
-        UserProfile profile = connection.fetchUserProfile();
 
+        String [] fields = { "email","first_name", "last_name","gender" };
+        org.springframework.social.facebook.api.User user = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class,fields);
+
+
+        String tempPassword = TokenUtil.generatePassword();
         Client client = new Client();
         client.setFirstName(user.getFirstName());
         client.setLastName(user.getLastName());
-        client.setEmail(profile.getEmail());
+        client.setEmail(user.getEmail());
         client.setReference(TokenUtil.generateReference());
         client.setSex(Sex.fromString(user.getGender().substring(0,1)));
-        client.setPassword(new BCryptPasswordEncoder().encode("12345678"));
+        client.setPassword(new BCryptPasswordEncoder().encode(tempPassword));
+        client.setTempPassword(tempPassword);
         client.setActivated(true);
         client.setPhotoUrl(connection.getProfileUrl());
         Optional<Authority> authority = authorityRepository.findOneByName(AuthoritiesConstants.CLIENT);
