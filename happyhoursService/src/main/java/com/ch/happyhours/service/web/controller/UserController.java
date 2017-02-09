@@ -75,4 +75,110 @@ public class UserController {
         ResponseEntity<JSONObject> responseEntity = restCLientCallback.refreshToken(oauthClientSecret, oauthClientId, "refresh_token", token);
         return responseEntity.getBody();
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/activate",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Activate Registration Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDto.class),
+            @ApiResponse(code = 400, message = "Invalid Key Value"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public UserDto activateRegistration(@RequestParam(value = "key") String key) throws HappyHoursException {
+        return userService.activateRegistration(key);
+    }
+
+    @RequestMapping(value = "/password/reset",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Reset Password Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully"),
+            @ApiResponse(code = 404, message = "User not Found")
+    })
+    public JSONObject resetPassword(@RequestParam("email") String email) throws HappyHoursException {
+
+        userService.requestPasswordReset(email);
+
+        JSONObject result = new JSONObject();
+        result.put("result", "email-sent");
+        result.put("info", "a mail has been sent to your mailbox");
+        return result;
+    }
+
+    @RequestMapping(value = "/password/reset/finish",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Complete Reset Password Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully"),
+            @ApiResponse(code = 404, message = "User not Found")
+    })
+    public JSONObject finishResetPassword(@RequestParam("password") String password, @RequestParam("key") String key) throws HappyHoursException {
+        JSONObject result = new JSONObject();
+        userService.completePasswordReset(password, key);
+        result.put("result", "reset-success");
+        return result;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "current/password/reset",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Change Password Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully"),
+            @ApiResponse(code = 400, message = "Password Don't Match"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public JSONObject changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) throws HappyHoursException {
+        JSONObject result = new JSONObject();
+        userService.changePassword(oldPassword, newPassword);
+        result.put("result", "reset-success");
+        return result;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "email/send",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Request Email Code Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public JSONObject requestEmailCode() throws HappyHoursException {
+
+        JSONObject result = new JSONObject();
+        userService.requestEmailVerification();
+        result.put("result", "sent-success");
+        return result;
+
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/mail/verify",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Verify Email Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDto.class),
+            @ApiResponse(code = 400, message = "Invalid Key Value"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public Object verifyEmail(@RequestParam("code") String code) throws HappyHoursException {
+
+        logger.debug("Call rest to verify email  ");
+        return userService.verifyEmail(code);
+
+    }
 }

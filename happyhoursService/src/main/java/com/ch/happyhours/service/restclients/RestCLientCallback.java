@@ -1,5 +1,6 @@
 package com.ch.happyhours.service.restclients;
 
+import com.ch.happyhours.service.web.dto.UserDto;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 
 @Component
-public class RestCLientCallback implements MailClient,UserClient {
+public class RestCLientCallback implements MailClient, UserClient {
 
     private static Logger logger = LoggerFactory.getLogger(RestCLientCallback.class);
 
@@ -22,15 +23,25 @@ public class RestCLientCallback implements MailClient,UserClient {
 
 
     @Override
-    @HystrixCommand(fallbackMethod = "sendActivationMailFallback")
-    public void sendActivationEmailMobile(String userDto) {
+    @HystrixCommand(fallbackMethod = "mailServiceFallback")
+    public void sendActivationEmailMobile(UserDto userDto) {
         mailClient.sendActivationEmailMobile(userDto);
     }
 
+    @Override
+    @HystrixCommand(fallbackMethod = "mailServiceFallback")
+    public void sendPasswordResetEmail(UserDto userDto) {
+        mailClient.sendPasswordResetEmail(userDto);
+    }
 
+    @Override
+    @HystrixCommand(fallbackMethod = "mailServiceFallback")
+    public void sendAccountConfirmationEmail(UserDto userDto) {
+        mailClient.sendAccountConfirmationEmail(userDto);
+    }
 
-    public void sendActivationMailFallback(String userDto) {
-        logger.error("Activation email couldn't be sent to the receiver : {}", userDto);
+    public void mailServiceFallback(String userDto) {
+        logger.error("Email couldn't be sent to the receiver : {}", userDto);
     }
 
     @Override

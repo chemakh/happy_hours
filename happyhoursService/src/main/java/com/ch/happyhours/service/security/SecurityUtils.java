@@ -44,23 +44,15 @@ public final class SecurityUtils {
     }
 
 
-    public static boolean isDoctor(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.DOCTOR);
+    public static boolean isManager(User user) {
+        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.MANAGER);
     }
 
     public static boolean isAdmin(User user) {
         return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ADMIN);
     }
 
-    public static boolean isPatient(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.PATIENT);
-    }
-
-    public static boolean isAssistantDoctor(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_DOCTOR);
-    }
-
-    public static boolean isAssistantAdmin(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_ADMIN);
+    public static boolean isClient(User user) {
+        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.CLIENT);
     }
 }
